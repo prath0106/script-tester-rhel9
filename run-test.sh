@@ -53,8 +53,8 @@ echo "📝 Output will be saved in: './${OUTPUT_DIR_NAME}/${OUTPUT_FILE_NAME}'"
 # The command at the end executes the script and redirects its output.
 echo "🐳 Running container..."
 docker run --rm \
-  -v "$(pwd)/${SCRIPT_TO_RUN}":/app/"${SCRIPT_FILENAME}":ro \
-  -v "$(pwd)/${OUTPUT_DIR_NAME}":/app/output \
+  -v "//${PWD}/${SCRIPT_TO_RUN}":/app/"${SCRIPT_FILENAME}" \
+  -v "//${PWD}/${OUTPUT_DIR_NAME}":/app/output \
   "$IMAGE_NAME" \
   bash -c "chmod +x /app/${SCRIPT_FILENAME} && /app/${SCRIPT_FILENAME} > /app/output/${OUTPUT_FILE_NAME}"
 

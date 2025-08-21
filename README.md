@@ -62,3 +62,6 @@ A tool to test shell scripts inside a clean, containerized Red Hat Enterprise Li
     ```
 
 You can now view the full report in the `output` folder on your computer.
+
+
+Built by Pratham & Gemini 2.5 Pro

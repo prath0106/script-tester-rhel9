@@ -1,74 +1,64 @@
 # RHEL 9 Script Runner Tool
 
-A simple tool to test any shell script inside a clean, containerized Red Hat Enterprise Linux 9 (RHEL 9) environment.
+A tool to test shell scripts inside a clean, containerized Red Hat Enterprise Linux 9 (RHEL 9) environment. This tool launches an interactive session inside the container, allowing you to run scripts that require user input.
 
-## How It Works
+## Features
 
-This tool uses Docker to perform the following steps:
-1.  Builds a minimal RHEL 9 Docker image (if not already built).
-2.  Creates a unique `output` directory to store the results.
-3.  Runs a new Docker container from the RHEL 9 image.
-4.  Mounts your script (read-only) and the output directory (read-write) into the container.
-5.  Executes your script inside the container.
-6.  Captures all standard output from your script and saves it to a log file.
-7.  Automatically cleans up and removes the container after execution.
-
-## Prerequisites
-
-To run this tool on **Windows**, you need:
--   [Docker Desktop](https://www.docker.com/products/docker-desktop/)
--   [Git for Windows](https://git-scm.com/download/win), which includes **Git Bash**.
-
-**All commands must be run from the Git Bash terminal.**
+* **Interactive Terminal:** Launches a fully interactive `bash` shell inside the RHEL 9 container.
+* **Live Output:** See your script's output in real-time as it executes.
+* **Output Capture:** Optionally save a complete log of your interactive session to a file using the `tee` command.
+* **Clean Environment:** Each session runs in a fresh, temporary container that is automatically removed when you exit.
 
 ## How to Use
 
 1.  **Clone the Repository**:
     ```bash
-    git clone [https://github.com/your-username/script-runner.git](https://github.com/your-username/script-runner.git)
-    cd script-runner
+    git clone [https://github.com/prath0106/script-tester-rhel9.git](https://github.com/prath0106/script-tester-rhel9.git)
+    cd script-tester-rhel9
     ```
 
-2.  **Make the Runner Script Executable** (you only need to do this once):
+2.  **Make the Runner Script Executable** (only needs to be done once):
     ```bash
     chmod +x run-test.sh
     ```
 
-3.  **Run the Tool**:
-    Execute the `run-test.sh` script, passing the path to the script you want to test as an argument.
-
+3.  **Launch the Interactive Tester**:
+    Run the `run-test.sh` script, passing the path to the script you want to test as an argument.
     ```bash
     ./run-test.sh <path/to/your/script.sh>
     ```
 
+4.  **Run Your Script Inside the Container**:
+    Your terminal prompt will change (e.g., `[root@container-id /app]#`). You are now inside the RHEL 9 container. Run your script manually.
+
+    * **To see live output only**:
+        ```bash
+        ./your-script.sh
+        ```
+    * **To see live output AND save a report file**:
+        Use the `tee` command as instructed by the tool.
+        ```bash
+        ./your-script.sh | tee output/your-script.sh.log
+        ```
+
+5.  **Exit the Container**:
+    When you're finished, type `exit` and press Enter to return to your normal terminal. Your report file will be in the `output` directory.
+
 ### Example
 
-We have included a sample script in the `test-scripts` directory. To run it:
+1.  **Launch the tool with the sample script:**
+    ```bash
+    ./run-test.sh test-scripts/system-info.sh
+    ```
 
-```bash
-./run-test.sh test-scripts/system-info.sh
-```
+2.  **Once inside the container, run the script and save the log:**
+    ```bash
+    ./system-info.sh | tee output/system-info.sh.log
+    ```
 
-### Expected Output
+3.  **Exit the container:**
+    ```bash
+    exit
+    ```
 
-The first time you run it, the tool will build the Docker image. Subsequent runs will be much faster.
-
-```
-🚀 Starting script testing tool...
-🔧 Docker image 'rhel9-script-runner' not found. Building it now...
-... (Docker build output) ...
-✅ Docker image built successfully.
-📂 Preparing to run script: 'test-scripts/system-info.sh'
-📝 Output will be saved in: './output/system-info.sh-20250821-120043/system-info.sh.log'
-🐳 Running container...
-🎉 Script execution finished!
-📄 You can find the output at: './output/system-info.sh-20250821-120043/system-info.sh.log'
-```
-
-You can then view the results:
-
-```bash
-cat output/system-info.sh-20250821-120043/system-info.sh.log
-```
-
-The output file will contain the execution results from inside the RHEL 9 container.
+You can now view the full report in the `output` folder on your computer.

@@ -1,64 +1,85 @@
-# RHEL 9 Script Runner Tool
+# RHEL 9 Script Generator & Tester
 
-A tool to test shell scripts inside a clean, containerized Red Hat Enterprise Linux 9 (RHEL 9) environment. This tool launches an interactive session inside the container, allowing you to run scripts that require user input.
+This tool provides a user-friendly interface to generate and test Red Hat Enterprise Linux 9 (RHEL 9) bash scripts using AI. It allows you to provide a requirements file, generate a script using an AI model (like Anthropic's Claude), and then safely execute the script to see a pass/fail report.
 
 ## Features
+-   **AI-Powered Script Generation**: Uses a large language model to create bash scripts from a simple requirements file.
+-   **Local Web Interface**: A simple front-end to manage the script generation and testing process.
+-   **Script Execution**: Runs the generated script and provides a clear pass/fail status with the complete output.
+-   **Cross-Platform**: Includes setup instructions for both Windows 11 and macOS (Apple Silicon).
 
-* **Interactive Terminal:** Launches a fully interactive `bash` shell inside the RHEL 9 container.
-* **Live Output:** See your script's output in real-time as it executes.
-* **Output Capture:** Optionally save a complete log of your interactive session to a file using the `tee` command.
-* **Clean Environment:** Each session runs in a fresh, temporary container that is automatically removed when you exit.
+---
 
-## How to Use
+## Prerequisites
+Before you begin, ensure you have the following installed on your system:
 
+-   **Node.js**: The JavaScript runtime to run the application. [Download Node.js (LTS)](https://nodejs.org/).
+-   **Git**: The version control system to manage code. [Download Git](https://git-scm.com/).
+-   **A Code Editor**: Such as [Visual Studio Code](https://code.visualstudio.com/).
+-   **An AI Provider API Key**: For example, from [Anthropic (Claude)](https://www.anthropic.com/).
+
+---
+
+## Setup and Installation
+Follow the steps below for your operating system.
+
+### On Windows 11
 1.  **Clone the Repository**:
     ```bash
-    git clone [https://github.com/prath0106/script-tester-rhel9.git](https://github.com/prath0106/script-tester-rhel9.git)
+    git clone <your-repository-url>
     cd script-tester-rhel9
     ```
-
-2.  **Make the Runner Script Executable** (only needs to be done once):
+2.  **Install Back-End Dependencies**:
     ```bash
-    chmod +x run-test.sh
+    cd backend
+    npm install
+    ```
+3.  **Install Front-End Dependencies**:
+    ```bash
+    cd ../frontend
+    npm install
     ```
 
-3.  **Launch the Interactive Tester**:
-    Run the `run-test.sh` script, passing the path to the script you want to test as an argument.
+### On macOS (Apple Silicon)
+1.  **Clone the Repository**:
     ```bash
-    ./run-test.sh <path/to/your/script.sh>
+    git clone <your-repository-url>
+    cd script-tester-rhel9
     ```
-
-4.  **Run Your Script Inside the Container**:
-    Your terminal prompt will change (e.g., `[root@container-id /app]#`). You are now inside the RHEL 9 container. Run your script manually.
-
-    * **To see live output only**:
-        ```bash
-        ./your-script.sh
-        ```
-    * **To see live output AND save a report file**:
-        Use the `tee` command as instructed by the tool.
-        ```bash
-        ./your-script.sh | tee output/your-script.sh.log
-        ```
-
-5.  **Exit the Container**:
-    When you're finished, type `exit` and press Enter to return to your normal terminal. Your report file will be in the `output` directory.
-
-### Example
-
-1.  **Launch the tool with the sample script:**
+2.  **Install Back-End Dependencies**:
     ```bash
-    ./run-test.sh test-scripts/system-info.sh
+    cd backend
+    npm install
     ```
-
-2.  **Once inside the container, run the script and save the log:**
+3.  **Install Front-End Dependencies**:
     ```bash
-    ./system-info.sh | tee output/system-info.sh.log
+    cd ../frontend
+    npm install
     ```
+---
 
-3.  **Exit the container:**
+## Running the Application
+You need to run both the back-end server and the front-end application simultaneously in two separate terminals.
+
+### 1. Start the Back-End Server
+-   Open a terminal and navigate to the `backend` directory.
     ```bash
-    exit
+    cd backend
+    node server.js
     ```
+-   The server will start, and you should see the message: `Server listening at http://localhost:3001`.
 
-You can now view the full report in the `output` folder on your computer.
+### 2. Start the Front-End Application
+-   Open a **new** terminal and navigate to the `frontend` directory.
+    ```bash
+    cd frontend
+    npm start
+    ```
+-   This will automatically open your web browser to `http://localhost:3000`.
+
+### 3. Using the Application
+1.  Enter your **API Key** from your chosen AI provider.
+2.  Upload a **requirements file** (e.g., a `.txt` or `.md` file).
+3.  Click **Generate Script**.
+4.  Review the generated script, then click **Run Script**.
+5.  View the pass/fail results and the script's output in the results box.

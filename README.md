@@ -85,7 +85,6 @@ You need to run both the back-end server and the front-end application simultane
 4.  Review the generated script, then click **Run Script**.
 5.  View the pass/fail results and the script's output in the results box.
 =======
-You can now view the full report in the `output` folder on your computer.
 
 
 Built by Pratham & Gemini 2.5 Pro

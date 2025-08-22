@@ -69,6 +69,7 @@ You need to run both the back-end server and the front-end application simultane
     ```
 -   The server will start, and you should see the message: `Server listening at http://localhost:3001`.
 
+<<<<<<< HEAD
 ### 2. Start the Front-End Application
 -   Open a **new** terminal and navigate to the `frontend` directory.
     ```bash
@@ -83,3 +84,9 @@ You need to run both the back-end server and the front-end application simultane
 3.  Click **Generate Script**.
 4.  Review the generated script, then click **Run Script**.
 5.  View the pass/fail results and the script's output in the results box.
+=======
+You can now view the full report in the `output` folder on your computer.
+
+
+Built by Pratham & Gemini 2.5 Pro
+>>>>>>> d68b5a7e4b5e3497a9e1744bf572d6fbc802c4e0

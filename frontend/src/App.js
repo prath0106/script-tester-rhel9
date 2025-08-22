@@ -4,11 +4,12 @@ import './App.css';
 function App() {
     const [file, setFile] = useState(null);
     const [apiKey, setApiKey] = useState('');
-    // The 'model' state is no longer needed
     const [script, setScript] = useState('');
     const [report, setReport] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    // State to toggle between generating and testing a custom script
+    const [isGeneratingNew, setIsGeneratingNew] = useState(true);
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -16,7 +17,7 @@ function App() {
 
     const generateScript = async () => {
         if (!file || !apiKey) {
-            setError('Please provide a requirements file and an anthropic API key.');
+            setError('Please provide a requirements file and an API key.');
             return;
         }
         setError('');
@@ -26,7 +27,6 @@ function App() {
 
         const formData = new FormData();
         formData.append('file', file);
-        // We no longer need to send the model, just the API key
         formData.append('apiKey', apiKey);
 
         try {
@@ -50,6 +50,10 @@ function App() {
     };
 
     const runScript = async () => {
+        if (!script) {
+            setError('There is no script to run.');
+            return;
+        }
         setIsLoading(true);
         setReport(null);
         try {
@@ -70,37 +74,43 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <h1>RHEL 9 Script Generator & Tester - Claude 3.7 Sonnet 🚀</h1>
+                <h1>RHEL 9 Script Generator & Tester</h1>
+
                 <div className="card">
-                    <h2>1. Configure & Provide Requirements</h2>
-                    
-                    {/* This entire section for the model dropdown is deleted */}
+                    <div className="toggle-buttons">
+                        <button onClick={() => setIsGeneratingNew(true)} className={isGeneratingNew ? 'active' : ''}>Generate New Script</button>
+                        <button onClick={() => setIsGeneratingNew(false)} className={!isGeneratingNew ? 'active' : ''}>Test My Own Script</button>
+                    </div>
 
-                    <label htmlFor="api-key-input">Enter Anthropic AI API Key:</label>
-                    <input
-                        id="api-key-input"
-                        type="password"
-                        value={apiKey}
-                        onChange={(e) => setApiKey(e.target.value)}
-                        placeholder="Your API key"
-                    />
-
-                    <label htmlFor="file-upload">Upload Requirements File:</label>
-                    <input id="file-upload" type="file" onChange={handleFileChange} />
-                    
-                    <button onClick={generateScript} disabled={isLoading}>
-                        {isLoading ? 'Generating...' : 'Generate Script'}
-                    </button>
+                    {isGeneratingNew ? (
+                        <>
+                            <h2>1. Generate Script from Requirements</h2>
+                            <label htmlFor="api-key-input">Enter API Key:</label>
+                            <input id="api-key-input" type="password" value={apiKey} onChange={(e) => setApiKey(e.target.value)} placeholder="Your API key" />
+                            <label htmlFor="file-upload">Upload Requirements File:</label>
+                            <input id="file-upload" type="file" onChange={handleFileChange} />
+                            <button onClick={generateScript} disabled={isLoading}>{isLoading ? 'Generating...' : 'Generate Script'}</button>
+                        </>
+                    ) : (
+                        <>
+                            <h2>1. Paste Your Script to Test</h2>
+                            <textarea
+                                className="script-box"
+                                value={script}
+                                onChange={(e) => setScript(e.target.value)}
+                                placeholder="Paste your bash script here..."
+                                rows="10"
+                            />
+                        </>
+                    )}
                     {error && <p className="error-message">{error}</p>}
                 </div>
 
                 {script && (
                     <div className="card">
-                        <h2>2. Review & Run Generated Script</h2>
+                        <h2>2. Review & Run Script</h2>
                         <pre className="script-box">{script}</pre>
-                        <button onClick={runScript} disabled={isLoading}>
-                            {isLoading ? 'Running...' : 'Run Script'}
-                        </button>
+                        <button onClick={runScript} disabled={isLoading}>{isLoading ? 'Running...' : 'Run Script'}</button>
                     </div>
                 )}
 
@@ -108,6 +118,11 @@ function App() {
                     <div className="card">
                         <h2>3. Results</h2>
                         <div dangerouslySetInnerHTML={{ __html: report.html }} />
+                        {report.downloadUrl && (
+                            <a href={report.downloadUrl} download="summary-report.html">
+                                <button className="download-button">Download HTML Report</button>
+                            </a>
+                        )}
                     </div>
                 )}
             </header>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RHEL 9 Security Compliance Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #cc0000; }
+        h2 { color: #333; margin-top: 20px; }
+        .requirement { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .status { font-weight: bold; }
+        .pass { color: green; }
+        .fail { color: red; }
+        .info { color: blue; }
+        pre { background-color: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>RHEL 9 Security Compliance Report</h1>
+    <div id="summary">
+        <h2>Summary</h2>
+        <p>Report generated on: <span id="date"></span></p>
+        <script>document.getElementById('date').textContent = new Date().toLocaleString();</script>
+    </div>
+    <div id="details">
+        <h2>Detailed Findings</h2>
+        <div class="requirement">
+            <h3>1. Ensure mounting of cramfs filesystems is disabled</h3>
+            <p>Status: <span class="status fail">FAIL</span></p>
+            <pre>cramfs module can still be loaded. Check if /etc/modprobe.d/cramfs.conf has been properly created.</pre>
+        </div>
+        <div class="requirement">
+            <h3>2. Disable USB Storage</h3>
+            <p>Status: <span class="status fail">FAIL</span></p>
+            <pre>usb-storage module can still be loaded. Check if /etc/modprobe.d/usb-storage.conf has been properly created.</pre>
+        </div>
+        <div class="requirement">
+            <h3>3. Ensure /tmp is a separate partition</h3>
+            <p>Status: <span class="status fail">FAIL</span></p>
+            <pre>/tmp is not configured as a separate partition. Add an entry to /etc/fstab for /tmp with appropriate options.\n\nRecommended solution: Add the following to /etc/fstab and reboot or mount manually:\ntmpfs  /tmp  tmpfs  defaults,noexec,nosuid,nodev  0 0</pre>
+        </div>
+    </div>
+</body>
+</html>

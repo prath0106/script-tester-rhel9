@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RHEL 9 Security Requirements Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333366; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h1>RHEL 9 Security Requirements Report</h1>
+    <table>
+        <tr>
+            <th>Requirement</th>
+            <th>Status</th>
+            <th>Details</th>
+        </tr>
+<tr>
+        <td>Disable cramfs filesystem</td>
+        <td style='color:green;font-weight:bold'>PASS</td>
+        <td>cramfs module has been disabled in /etc/modprobe.d/cramfs.conf</td>
+    </tr>
+<tr>
+        <td>Disable USB Storage</td>
+        <td style='color:green;font-weight:bold'>PASS</td>
+        <td>USB storage has been disabled in /etc/modprobe.d/usb-storage.conf</td>
+    </tr>
+<tr>
+        <td>Ensure /tmp is a separate partition</td>
+        <td style='color:green;font-weight:bold'>PASS</td>
+        <td>Created and enabled systemd tmp.mount for /tmp</td>
+    </tr>
+    </table>
+    <p><strong>Report generated on:</strong> $(date)</p>
+</body>
+</html>
